@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/02 23:51:04 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/03 00:26:35 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int				g_pid_server;
 uint32_t		*g_msg;
 const uint32_t	g_bitsize = 8;
+static bool		server_rdy;
 
 void	send_char(int pid, uint32_t g_bitsize, char c)
 {
@@ -57,6 +58,17 @@ static void	send_g_msg(int pid, const uint32_t *g_msg)
 	}
 }
 
+static void	send_start_msg(int pid)
+{
+	char	c;
+
+	write(1, "\n#send - asking for permission (ACK)\n", \
+		ft_strlen("\n#send - asking for permission (ACK)\n"));
+	c = 6; //ACK Ascii
+	send_char(pid, g_bitsize, c);
+}
+
+// client schickt startmsg -> client wartet bis server sigurs1 sendet
 static void	handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
@@ -64,7 +76,13 @@ static void	handler(int sig, siginfo_t *info, void *context)
 
 	if (sig == SIGUSR1)
 	{
+		server_rdy = true;
+	}
+	else if (sig == SIGUSR2)
+	{
+		server_rdy = true;
 		ft_printf("\n#server recieved msg\n");
+		exit(0);
 	}
 	else
 	{
@@ -73,17 +91,36 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	}
 }
 
+// static void	handler(int sig, siginfo_t *info, void *context)
+// {
+// 	(void)info;
+// 	(void)context;
+
+// 	if (sig == SIGUSR2)
+// 	{
+// 		ft_printf("\n#server recieved msg\n");
+// 	}
+// 	else
+// 	{
+// 		ft_printf("(handler) something happened\n");
+// 		exit(0);
+// 	}
+// }
+
 int	main(int argc, char **argv)
 {
 	struct sigaction	s_sigaction;
 
 	if (argc == 3)
 	{
+		g_pid_server = atoi(argv[1]);
+		g_msg = (void *)argv[2];
+		send_start_msg(g_pid_server);
 		s_sigaction.sa_sigaction = handler;
 		s_sigaction.sa_flags = SA_SIGINFO;
 		sigaction(SIGUSR1, &s_sigaction, NULL);
-		g_pid_server = atoi(argv[1]);
-		g_msg = (void *)argv[2];
+		while (!server_rdy);
+		sigaction(SIGUSR2, &s_sigaction, NULL);
 		write(1, "#send - g_msg:", ft_strlen("#send - g_msg:"));
 		write(1, argv[2], ft_strlen(argv[2]));
 		send_g_msg(g_pid_server, g_msg);
@@ -91,6 +128,7 @@ int	main(int argc, char **argv)
 		write(1, "\n#send - end of transmission (EOT)", \
 			ft_strlen("\n#send - end of transmission (EOT)"));
 		send_g_msg(g_pid_server, g_msg);
+		server_rdy = false;
 	}
 	else
 	{
