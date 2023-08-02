@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/02 03:36:10 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/02 04:12:15 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 uint32_t		g_incoming_type;
 static uint32_t	g_bits;
 
-static void	handler(int sig)
+static void	handler(int sig, siginfo_t *info, void *context)
 {
+	(void)info;
+	(void)context;
 	if (sig == SIGUSR1)
 	{
 		g_incoming_type |= (1 << g_bits);
@@ -35,13 +37,16 @@ static void	handler(int sig)
 
 int	main(void)
 {
-	const uint32_t	g_bitsize;
+	struct sigaction	s_sigaction;
+	uint32_t			g_bitsize;
 
+	s_sigaction.sa_sigaction = handler;
+	s_sigaction.sa_flags = SA_SIGINFO;
 	g_bitsize = 8;
 	g_incoming_type = 0;
 	ft_printf("Server runs ..\nPID:%d\n\n", getpid());
-	signal(SIGUSR1, handler);
-	signal(SIGUSR2, handler);
+	sigaction(SIGUSR1, &s_sigaction, NULL);
+	sigaction(SIGUSR2, &s_sigaction, NULL);
 	while (1)
 	{
 		if (g_bits >= g_bitsize)
