@@ -6,7 +6,7 @@
 #    By: hstein <hstein@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/02 02:12:26 by hstein            #+#    #+#              #
-#    Updated: 2023/08/02 03:36:11 by hstein           ###   ########.fr        #
+#    Updated: 2023/08/02 23:01:35 by hstein           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,9 @@ CFLAGS		= -Wall -Wextra -Werror
 LIBFT		= ./libft/libft.a
 PRINTF		= ./printf/libftprintf.a
 
-SERVER_SRCS = ./src/server.c
+SERVER_SRCS = ./src/server.c ./src/utils.c
 SERVER_OBJS = $(SERVER_SRCS:.c=.o)
-CLIENT_SRCS = ./src/client.c
+CLIENT_SRCS = ./src/client.c ./src/utils.c
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 # SERVER_BONUS = server_bonus
 # CLIENT_BONUS = client_bonus
