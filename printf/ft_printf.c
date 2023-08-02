@@ -27,7 +27,7 @@ static int	ft_strlen_nullsub(char *s)
 }
 
 static void	ft_putnstr_fd(char *s, int n, int fd)
-{	
+{
 	int	i;
 
 	i = 0;

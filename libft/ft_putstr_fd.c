@@ -6,14 +6,14 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:28:00 by hstein            #+#    #+#             */
-/*   Updated: 2022/12/22 21:52:58 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/02 03:35:45 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 void	ft_putstr_fd(char *s, int fd)
-{	
+{
 	int	i;
 
 	i = 0;
