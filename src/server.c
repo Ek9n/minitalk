@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/02 04:12:15 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/02 23:53:41 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 uint32_t		g_incoming_type;
 static uint32_t	g_bits;
+static uint32_t	g_client_pid;
+static bool		busy;
 
 static void	handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
+
+	g_client_pid = info->si_pid;
 	if (sig == SIGUSR1)
 	{
 		g_incoming_type |= (1 << g_bits);
@@ -52,7 +56,11 @@ int	main(void)
 		if (g_bits >= g_bitsize)
 		{
 			if (g_incoming_type == 4)
+			{
 				ft_printf("\n");
+				kill(g_client_pid, SIGUSR1);
+				usleep(100);
+			}
 			write(1, &g_incoming_type, 1);
 			g_bits = 0;
 			g_incoming_type = 0;
