@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 02:31:50 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 04:11:31 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool		busy;
 
 static void	handler(int sig, siginfo_t *info, void *context)
 {
-	(void)info;
+	// (void)info;
 	(void)context;
 
 	if (!busy) //was ist wenn vorher ein signal gesendet wird und es keine 6 ist... abfangen (eventuell flag fuer 1 byte recieved)
@@ -34,13 +34,14 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	{
 		if (sig == SIGUSR1 && info->si_pid == g_client_pid)
 		{
-			// ft_printf("in handler SIGUSR1\n");
+			// ft_printf("in handler SIGUSR1 1\n");
 			g_incoming_type |= (1 << g_bits);
 			g_bits++;
 			// ft_printf("g_bits:%d\n", g_bits);
 		}
 		else if (sig == SIGUSR2 && info->si_pid == g_client_pid)
 		{
+			// ft_printf("in handler SIGUSR2 0\n");
 			g_bits++;
 		}
 		else if (info->si_pid == g_client_pid)
@@ -101,8 +102,9 @@ int	main(void)
 			{
 				ft_printf("\n");
 				ft_printf("#MSG sent\n");
-				kill(g_client_pid, SIGUSR2);
-				usleep(1000);
+				for (int i = 0; i < 50; i++)
+					kill(g_client_pid, SIGUSR2);
+				// usleep(1000);
 				g_bits = 0;
 				g_incoming_type = 0;
 				first_byte = false;

@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 04:11:30 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 02:31:51 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_char(int pid, uint32_t g_bitsize, char c)
 			// write(1, "0", 1);
 			kill(pid, SIGUSR2);
 		}
-		usleep(120);
+		usleep(1000);
 		// sleep(1);
 	}
 }
@@ -68,7 +68,7 @@ static void	send_start_msg(int pid)
 	c = 6; //ACK Ascii
 	send_char(pid, g_bitsize, c);
 	// sleep(1);
-	usleep(100);
+	usleep(1000);
 }
 
 // client schickt startmsg -> client wartet bis server sigurs1 sendet
@@ -118,11 +118,7 @@ int	main(int argc, char **argv)
 		sigaction(SIGUSR2, &s_sigaction, NULL);
 		*g_msg = 4;
 		while (1)
-		{
-			sleep(1);
 			send_msg(g_pid_server, g_msg);
-			// usleep(100);
-		}
 		pause();
 		server_rdy = false;
 	}
