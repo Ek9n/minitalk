@@ -6,7 +6,7 @@
 #    By: hstein <hstein@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/02 02:12:26 by hstein            #+#    #+#              #
-#    Updated: 2023/08/04 21:29:17 by hstein           ###   ########.fr        #
+#    Updated: 2023/08/05 00:19:11 by hstein           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,12 @@ SERVER_SRCS = ./src/server.c
 SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 CLIENT_SRCS = ./src/client.c
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
-# SERVER_BONUS = server_bonus
-# CLIENT_BONUS = client_bonus
-# SERVER_BONUS_SRCS = server_bonus.c
-# SERVER_BONUS_OBJS = $(SERVER_BONUS_SRCS:.c=.o)
-# CLIENT_BONUS_SRCS = client_bonus.c
-# CLIENT_BONUS_OBJS = $(CLIENT_BONUS_SRCS:.c=.o)
+SERVER_BONUS = server_bonus
+CLIENT_BONUS = client_bonus
+SERVER_BONUS_SRCS = ./src/server_bonus.c
+SERVER_BONUS_OBJS = $(SERVER_BONUS_SRCS:.c=.o)
+CLIENT_BONUS_SRCS = ./src/client_bonus.c
+CLIENT_BONUS_OBJS = $(CLIENT_BONUS_SRCS:.c=.o)
 
 RM			= rm -rf
 
@@ -41,10 +41,10 @@ $(SERVER): $(SERVER_OBJS) $(LIBFT) $(PRINTF)
 $(CLIENT): $(CLIENT_OBJS) $(LIBFT) $(PRINTF)
 	$(CC) $(CFLAGS) $(CLIENT_OBJS) $(LIBFT) $(PRINTF) -o $(CLIENT)
 	
-# $(SERVER_BONUS): $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF)
-#     $(CC) $(CFLAGS) $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF) -o server_bonus
-# $(CLIENT_BONUS): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
-#     $(CC) $(CFLAGS) $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF) -o client_bonus
+$(SERVER_BONUS): $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF) -o server_bonus
+$(CLIENT_BONUS): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF) -o client_bonus
 
 clean:
 	$(MAKE) clean -C ./libft
@@ -58,4 +58,4 @@ fclean: clean
 
 re: fclean all
 
-# bonus: $(SERVER_BONUS) $(CLIENT_BONUS)
+bonus: $(SERVER_BONUS) $(CLIENT_BONUS)

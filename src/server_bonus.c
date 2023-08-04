@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:03:54 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 23:52:00 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
-void	print_byte(uint32_t *bits, uint32_t *incoming_type)
+void	dostuff(uint32_t *bits, uint32_t *incoming_type, int *client_pid)
 {
 	if (*bits >= 8)
 	{
-		write(1, incoming_type, 1);
+		if (*incoming_type == 4)
+		{
+			write(1, "\n", 1);
+			kill(*client_pid, SIGUSR2);
+			*client_pid = 0;
+		}
+		else
+			write(1, incoming_type, 1);
 		*bits = 0;
 		*incoming_type = 0;
 	}
@@ -43,7 +50,7 @@ static void	handler(int sig, siginfo_t *info, void *context)
 		ft_printf("(handler) something happened\n");
 		exit(0);
 	}
-	print_byte(&bits, &incoming_type);
+	dostuff(&bits, &incoming_type, &client_pid);
 }
 
 int	main(void)

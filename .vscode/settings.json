@@ -3,6 +3,8 @@
         "minitalk.h": "c",
         "ft_printf.h": "c",
         "libft.h": "c",
-        "inttypes.h": "c"
+        "inttypes.h": "c",
+        "unistd.h": "c",
+        "stdbool.h": "c"
     }
 }
