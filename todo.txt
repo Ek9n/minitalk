@@ -29,3 +29,11 @@ ein static/oderglobal arraycnt der increased wird sobald ein msg vorgang eines c
     dann wird auf die naechste pid im array zugegriffen
 //ein Flag fuer den Server () // vielleicht nicht noetig.. nach endmsg eingang wird pid_zugriffs_arraycnter increased 
 ein Flag fuer den Clienten - warten so lang der server noch ein ok geschickt hat
+
+
+
+////
+
+1. syncro
+2. wenn lange nachricht von client1 und client2 dazu kommt ... gibt es probleme weil signale verloren gehen
+->eine loesung nach syncro ist: so lange endmsg zurueckgeben bis server response

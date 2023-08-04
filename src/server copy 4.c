@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 02:31:50 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 01:38:30 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ static void	handler(int sig, siginfo_t *info, void *context)
 		busy = true;
 	}
 	// printf("busyflag=%d\n", busy);
-	if (info->si_pid == g_client_pid && busy)
+	if (info->si_pid == g_client_pid)
 	{
 		if (sig == SIGUSR1 && info->si_pid == g_client_pid)
 		{
-			// ft_printf("in handler SIGUSR1\n");
 			g_incoming_type |= (1 << g_bits);
 			g_bits++;
-			// ft_printf("g_bits:%d\n", g_bits);
 		}
 		else if (sig == SIGUSR2 && info->si_pid == g_client_pid)
 		{
@@ -61,7 +59,6 @@ int	main(void)
 	s_sigaction.sa_flags = SA_SIGINFO;
 	byte = 8;
 	g_incoming_type = 0;
-
 	ft_printf("Server runs ..\nPID:%d\n\n", getpid());
 	sigaction(SIGUSR1, &s_sigaction, NULL);
 	sigaction(SIGUSR2, &s_sigaction, NULL);
@@ -82,12 +79,12 @@ int	main(void)
 				// usleep(10000);
 				first_byte = true;
 			}
-			if (!first_byte)////////kann raus?                01 110
+			if (!first_byte)////////kann raus?
 			{
-				ft_printf("firrrrrst c:%d\n", g_incoming_type);
+				ft_printf("first c:%d\n", g_incoming_type);
 				g_bits = 0;
 				g_incoming_type = 0;
-				// first_byte = false;
+				first_byte = false;
 				busy = false;
 			}
 			else if (g_incoming_type != 6 && !first_byte)
