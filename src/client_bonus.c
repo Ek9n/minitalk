@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 05:23:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/08/05 18:14:52 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,13 @@ void	send_char(int pid, uint32_t bitsize, char c)
 	while (++bit < bitsize)
 	{
 		g_confirmed = false;
-		if (c >> bit & 1)
-			kill(pid, SIGUSR1);
-		else
-			kill(pid, SIGUSR2);
-		// usleep(1);
 		while(!g_confirmed)
 		{
-			write(1, "!g_confirmed\n", 2);
-			// pause();
+			if (c >> bit & 1)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			usleep(1000);
 		}
 	}
 }
@@ -62,7 +60,8 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (sig == SIGUSR1)
 	{
-		ft_printf("\n#BIT confirmed by server\n");
+		// ft_printf("\n#BIT confirmed by server\n");
+		usleep(5);
 		g_confirmed = true;
 	}
 	else if (sig == SIGUSR2)
@@ -91,7 +90,7 @@ int	main(int argc, char **argv)
 		s_sigaction.sa_flags = SA_SIGINFO;
 		pid_server = atoi(argv[1]);
 		msg = (void *)argv[2];
-		write(1, "#send - msg:", ft_strlen("#send - msg\n..."));
+		ft_printf("#sending - msg\n...");
 		sigaction(SIGUSR1, &s_sigaction, NULL);
 		send_msg(pid_server, msg, bitsize);
 		ft_printf("\n#send - end of transmission (EOT)");
@@ -99,7 +98,7 @@ int	main(int argc, char **argv)
 		sigaction(SIGUSR2, &s_sigaction, NULL);
 		send_msg(pid_server, msg, bitsize);
 		while (!g_flag)
-		{
+		{			
 		}
 	}
 	else

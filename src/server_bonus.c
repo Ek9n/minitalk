@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 05:32:54 by marvin           ###   ########.fr       */
+/*   Updated: 2023/08/05 18:14:45 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,8 @@ static void	handler(int sig, siginfo_t *info, void *context)
 		}
 		else if (sig == SIGUSR2)
 			bits++;
+		print_byte(&bits, &incoming_type, &client_pid);
 	}
-	else
-	{
-		ft_printf("(handler) something happened\n");
-		exit(0);
-	}
-	print_byte(&bits, &incoming_type, &client_pid);
 }
 
 int	main(void)
