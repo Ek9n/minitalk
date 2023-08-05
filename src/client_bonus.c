@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:00:49 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 01:17:29 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	send_char(int pid, uint32_t bitsize, char c)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(140);
+		usleep(100);
 	}
 }
 
@@ -46,6 +46,7 @@ static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
 		send_char(pid, bitsize, c);
 		c = *cast_msg;
 		bytesize_msg--;
+		pause();
 	}
 }
 
@@ -85,6 +86,7 @@ int	main(int argc, char **argv)
 		*msg = 4;
 		sigaction(SIGUSR2, &s_sigaction, NULL);
 		send_msg(pid_server, msg, bitsize);
+		g_flag = false;
 		while (!g_flag)
 		{
 		}

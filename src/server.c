@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:03:54 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 02:05:12 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,11 @@ void	print_byte(uint32_t *bits, uint32_t *incoming_type)
 	}
 }
 
-static void	handler(int sig, siginfo_t *info, void *context)
+void	handler(int sig)
 {
 	static uint32_t		bits;
-	static int			client_pid;
 	static uint32_t		incoming_type;
 
-	(void) context;
-	if (client_pid == 0)
-		client_pid = info->si_pid;
 	if (sig == SIGUSR1)
 	{
 		incoming_type |= (1 << bits);
@@ -50,8 +46,8 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-	s_sigaction.sa_sigaction = handler;
-	s_sigaction.sa_flags = SA_SIGINFO;
+	s_sigaction.sa_flags = 0;
+	s_sigaction.sa_handler = handler;
 	ft_printf("Server runs ..\nPID:%d\n\n", getpid());
 	sigaction(SIGUSR1, &s_sigaction, NULL);
 	sigaction(SIGUSR2, &s_sigaction, NULL);

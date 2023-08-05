@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:17:06 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 02:05:11 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	send_char(int pid, uint32_t bitsize, char c)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(140);
+		usleep(5);
 	}
 }
 
@@ -37,7 +37,7 @@ static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
 	bitsize_msg = ft_strlen((char *)msg) * bitsize;
 	bytesize_msg = ft_strlen((char *)msg);
 	cast_msg = (char *)msg;
-	printf("\nBits sent: %d\n", bitsize_msg);
+	ft_printf("\nBits sent: %d\n", bitsize_msg);
 	c = *cast_msg;
 	while (*cast_msg++ && bytesize_msg)
 	{
