@@ -6,13 +6,13 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 23:52:00 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 03:29:49 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
-void	dostuff(uint32_t *bits, uint32_t *incoming_type, int *client_pid)
+void	print_byte(uint32_t *bits, uint32_t *incoming_type, int *client_pid)
 {
 	if (*bits >= 8)
 	{
@@ -20,6 +20,7 @@ void	dostuff(uint32_t *bits, uint32_t *incoming_type, int *client_pid)
 		{
 			write(1, "\n", 1);
 			kill(*client_pid, SIGUSR2);
+			ft_printf("#MSG send\nServer_PID:%d\n\n", getpid());
 			*client_pid = 0;
 		}
 		else
@@ -38,6 +39,8 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (client_pid == 0)
 		client_pid = info->si_pid;
+	if (sig == SIGUSR1 || sig == SIGUSR2)
+		kill(client_pid, SIGUSR1);
 	if (sig == SIGUSR1)
 	{
 		incoming_type |= (1 << bits);
@@ -50,7 +53,7 @@ static void	handler(int sig, siginfo_t *info, void *context)
 		ft_printf("(handler) something happened\n");
 		exit(0);
 	}
-	dostuff(&bits, &incoming_type, &client_pid);
+	print_byte(&bits, &incoming_type, &client_pid);
 }
 
 int	main(void)

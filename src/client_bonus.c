@@ -6,13 +6,14 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:00:49 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 03:28:26 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
 static bool	g_flag;
+static bool	g_confirmed;
 
 void	send_char(int pid, uint32_t bitsize, char c)
 {
@@ -21,11 +22,17 @@ void	send_char(int pid, uint32_t bitsize, char c)
 	bit = -1;
 	while (++bit < bitsize)
 	{
+		g_confirmed = false;
 		if (c >> bit & 1)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(140);
+		// usleep(1);
+		while(!g_confirmed)
+		{
+			write(1, "!g_confirmed\n", 2);
+			// pause();
+		}
 	}
 }
 
@@ -39,7 +46,6 @@ static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
 	bitsize_msg = ft_strlen((char *)msg) * bitsize;
 	bytesize_msg = ft_strlen((char *)msg);
 	cast_msg = (char *)msg;
-	printf("\nBits sent: %d\n", bitsize_msg);
 	c = *cast_msg;
 	while (*cast_msg++ && bytesize_msg)
 	{
@@ -47,13 +53,19 @@ static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
 		c = *cast_msg;
 		bytesize_msg--;
 	}
+	printf("\nBits sent: %d\n", bitsize_msg);
 }
 
 static void	handler(int sig, siginfo_t *info, void *context)
 {
 	(void) info;
 	(void) context;
-	if (sig == SIGUSR2)
+	if (sig == SIGUSR1)
+	{
+		ft_printf("\n#BIT confirmed by server\n");
+		g_confirmed = true;
+	}
+	else if (sig == SIGUSR2)
 	{
 		ft_printf("\n#MSG confirmed by server\n");
 		g_flag = true;
@@ -80,6 +92,7 @@ int	main(int argc, char **argv)
 		pid_server = atoi(argv[1]);
 		msg = (void *)argv[2];
 		write(1, "#send - msg:", ft_strlen("#send - msg\n..."));
+		sigaction(SIGUSR1, &s_sigaction, NULL);
 		send_msg(pid_server, msg, bitsize);
 		ft_printf("\n#send - end of transmission (EOT)");
 		*msg = 4;
