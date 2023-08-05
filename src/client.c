@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 04:11:30 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 15:34:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	send_char(int pid, uint32_t g_bitsize, char c)
 			// write(1, "0", 1);
 			kill(pid, SIGUSR2);
 		}
-		usleep(120);
+		usleep(10); //120 Sebastian
 		// sleep(1);
 	}
 }
@@ -76,7 +76,9 @@ static void	handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
+	// static int	state;
 
+	// if (sig == SIGUSR1 && state++ == 0)
 	if (sig == SIGUSR1)
 	{
 		ft_printf("\n#server send ok\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/04 04:11:31 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/04 05:46:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	main(void)
 	sigaction(SIGUSR2, &s_sigaction, NULL);
 	while (1)
 	{//here ist das problem
- 		pause();
 				// ft_printf("%d\n", g_bits); //bytes
 		if (g_bits >= byte)
 		{	
@@ -115,6 +114,7 @@ int	main(void)
 			g_bits = 0;
 			g_incoming_type = 0;
 		}
+ 		pause();
 	}
 	return (0);
 }
