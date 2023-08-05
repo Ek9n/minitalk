@@ -6,22 +6,24 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 18:14:45 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 22:23:54 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
-void	print_byte(uint32_t *bits, uint32_t *incoming_type, int *client_pid)
+static int			g_client_pid;
+
+void	print_byte(uint32_t *bits, uint32_t *incoming_type, int *g_client_pid)
 {
 	if (*bits >= 8)
 	{
 		if (*incoming_type == 4)
 		{
 			write(1, "\n", 1);
-			kill(*client_pid, SIGUSR2);
+			kill(*g_client_pid, SIGUSR2);
 			ft_printf("#MSG send\nServer_PID:%d\n\n", getpid());
-			*client_pid = 0;
+			*g_client_pid = 0;
 		}
 		else
 			write(1, incoming_type, 1);
@@ -34,14 +36,13 @@ static void	handler(int sig, siginfo_t *info, void *context)
 {
 	static uint32_t		bits;
 	static uint32_t		incoming_type;
-	static int			client_pid;
 
 	(void) context;
-	if (client_pid == 0)
-		client_pid = info->si_pid;
-	if ((sig == SIGUSR1 || sig == SIGUSR2) && (info->si_pid == client_pid))
+	if (g_client_pid == 0)
+		g_client_pid = info->si_pid;
+	if ((sig == SIGUSR1 || sig == SIGUSR2) && (info->si_pid == g_client_pid))
 	{
-		kill(client_pid, SIGUSR1);
+		kill(g_client_pid, SIGUSR1);
 		if (sig == SIGUSR1)
 		{
 			incoming_type |= (1 << bits);
@@ -49,7 +50,7 @@ static void	handler(int sig, siginfo_t *info, void *context)
 		}
 		else if (sig == SIGUSR2)
 			bits++;
-		print_byte(&bits, &incoming_type, &client_pid);
+		print_byte(&bits, &incoming_type, &g_client_pid);
 	}
 }
 

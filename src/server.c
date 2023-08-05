@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 00:03:54 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 22:33:59 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	static uint32_t		bits;
 	static int			client_pid;
 	static uint32_t		incoming_type;
+	static size_t		cnt;
 
+	if (cnt > 10)
+		printf("hi\n");
+	cnt++;
 	(void) context;
 	if (client_pid == 0)
 		client_pid = info->si_pid;
