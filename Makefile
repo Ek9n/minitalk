@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hstein <hstein@student.42.fr>              +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/02 02:12:26 by hstein            #+#    #+#              #
-#    Updated: 2023/08/05 00:19:11 by hstein           ###   ########.fr        #
+#    Updated: 2023/08/05 05:21:57 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,15 +36,19 @@ $(LIBFT):
 	$(MAKE) -C ./libft
 $(PRINTF):
 	$(MAKE) -C ./printf
-$(SERVER): $(SERVER_OBJS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(SERVER_OBJS) $(LIBFT) $(PRINTF) -o $(SERVER)
-$(CLIENT): $(CLIENT_OBJS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(CLIENT_OBJS) $(LIBFT) $(PRINTF) -o $(CLIENT)
-	
-$(SERVER_BONUS): $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF) -o server_bonus
-$(CLIENT_BONUS): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF) -o client_bonus
+
+# $(SERVER): $(SERVER_OBJS) $(LIBFT) $(PRINTF)
+# 	$(CC) $(CFLAGS) $(SERVER_OBJS) $(LIBFT) $(PRINTF) -o $(SERVER)
+# $(CLIENT): $(CLIENT_OBJS) $(LIBFT) $(PRINTF)
+# 	$(CC) $(CFLAGS) $(CLIENT_OBJS) $(LIBFT) $(PRINTF) -o $(CLIENT)
+$(SERVER): $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF) -o $(SERVER_BONUS)
+$(CLIENT): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
+	$(CC) $(CFLAGS) $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF) -o $(CLIENT_BONUS)
+# $(SERVER_BONUS): $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF)
+# 	$(CC) $(CFLAGS) $(SERVER_BONUS_OBJS) $(LIBFT) $(PRINTF) -o server_bonus
+# $(CLIENT_BONUS): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
+# 	$(CC) $(CFLAGS) $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF) -o client_bonus
 
 clean:
 	$(MAKE) clean -C ./libft
@@ -58,4 +62,4 @@ fclean: clean
 
 re: fclean all
 
-bonus: $(SERVER_BONUS) $(CLIENT_BONUS)
+# bonus: $(SERVER_BONUS) $(CLIENT_BONUS)

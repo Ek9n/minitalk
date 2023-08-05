@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:19 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 03:29:49 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 05:31:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,17 @@ static void	handler(int sig, siginfo_t *info, void *context)
 	(void) context;
 	if (client_pid == 0)
 		client_pid = info->si_pid;
-	if (sig == SIGUSR1 || sig == SIGUSR2)
-		kill(client_pid, SIGUSR1);
-	if (sig == SIGUSR1)
+	if ((sig == SIGUSR1 || sig == SIGUSR2) && (info->si_pid == client_pid))
 	{
-		incoming_type |= (1 << bits);
-		bits++;
+		kill(client_pid, SIGUSR1);
+		if (sig == SIGUSR1)
+		{
+			incoming_type |= (1 << bits);
+			bits++;
+		}
+		else if (sig == SIGUSR2)
+			bits++;
 	}
-	else if (sig == SIGUSR2)
-		bits++;
 	else
 	{
 		ft_printf("(handler) something happened\n");
