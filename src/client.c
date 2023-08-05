@@ -6,7 +6,7 @@
 /*   By: hstein <hstein@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 02:27:10 by hstein            #+#    #+#             */
-/*   Updated: 2023/08/05 02:05:11 by hstein           ###   ########.fr       */
+/*   Updated: 2023/08/05 02:07:35 by hstein           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
 		send_char(pid, bitsize, c);
 		c = *cast_msg;
 		bytesize_msg--;
+		pause();
 	}
 }
 
