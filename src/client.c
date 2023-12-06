@@ -48,7 +48,7 @@ static void	send_msg(int pid, char *msg, char bitsize)
 int	main(int argc, char **argv)
 {
 	int		pid_server;
-	int		bitsize;
+	char	bitsize;
 	char	*msg;
 	char	eot;
 
