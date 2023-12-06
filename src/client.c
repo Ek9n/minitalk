@@ -12,9 +12,9 @@
 
 #include "../minitalk.h"
 
-void	send_char(int pid, uint32_t bitsize, char c)
+void	send_char(int pid, char bitsize, char c)
 {
-	uint32_t	bit;
+	char	bit;
 
 	bit = -1;
 	while (++bit < bitsize)
@@ -27,39 +27,37 @@ void	send_char(int pid, uint32_t bitsize, char c)
 	}
 }
 
-static void	send_msg(int pid, const uint32_t *msg, uint32_t bitsize)
+static void	send_msg(int pid, char *msg, char bitsize)
 {
-	char		c;
-	int			bitsize_msg;
-	int			bytesize_msg;
-	char		*cast_msg;
+	char	c;
+	int		bitsize_msg;
+	int		bytesize_msg;
 
-	bitsize_msg = ft_strlen((char *)msg) * bitsize;
-	bytesize_msg = ft_strlen((char *)msg);
-	cast_msg = (char *)msg;
+	bitsize_msg = ft_strlen(msg) * bitsize;
+	bytesize_msg = ft_strlen(msg);
 	printf("\nBits sent: %d\n", bitsize_msg);
-	c = *cast_msg;
-	while (*cast_msg++ && bytesize_msg)
+	c = *msg;
+	while (*msg++ && bytesize_msg)
 	{
 		send_char(pid, bitsize, c);
-		c = *cast_msg;
+		c = *msg;
 		bytesize_msg--;
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	int					pid_server;
-	uint32_t			*msg;
-	uint32_t			bitsize;
-	uint32_t			eot;
+	int		pid_server;
+	int		bitsize;
+	char	*msg;
+	char	eot;
 
 	eot = 10;
 	bitsize = 8;
 	if (argc == 3)
 	{
 		pid_server = atoi(argv[1]);
-		msg = (void *)argv[2];
+		msg = argv[2];
 		write(1, "#send - msg:", ft_strlen("#send - msg\n..."));
 		send_msg(pid_server, msg, bitsize);
 		send_msg(pid_server, &eot, bitsize);

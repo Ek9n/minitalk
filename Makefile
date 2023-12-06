@@ -49,12 +49,12 @@ $(CLIENT_BONUS): $(CLIENT_BONUS_OBJS) $(LIBFT) $(PRINTF)
 clean:
 	$(MAKE) clean -C ./libft
 	$(RM) $(SERVER_OBJS) $(CLIENT_OBJS)
-	# $(RM) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS) 
+	$(RM) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS) 
 fclean: clean
 	$(MAKE) fclean -C ./libft
 	$(MAKE) fclean -C ./printf
 	$(RM) $(SERVER) $(CLIENT)
-	# $(RM) $(SERVER_BONUS) $(CLIENT_BONUS)
+	$(RM) $(SERVER_BONUS) $(CLIENT_BONUS)
 
 re: fclean all
 

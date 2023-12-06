@@ -12,7 +12,7 @@
 
 #include "../minitalk.h"
 
-void	print_byte(uint32_t *bits, uint32_t *incoming_type)
+void	print_byte(char *bits, char *incoming_type)
 {
 	if (*bits >= 8)
 	{
@@ -24,9 +24,9 @@ void	print_byte(uint32_t *bits, uint32_t *incoming_type)
 
 static void	handler(int sig, siginfo_t *info, void *context)
 {
-	static uint32_t		bits;
-	static int			client_pid;
-	static uint32_t		incoming_type;
+	static int	client_pid;
+	static char	bits;
+	static char	incoming_type;
 
 	(void) context;
 	if (client_pid == 0)
